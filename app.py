@@ -8,7 +8,7 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 app = Flask(__name__)
-CORS(app, origins=["https://portfolio-2-ao4.pages.dev"])
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-pro")
@@ -19,8 +19,11 @@ You are a chatbot for Rajvel's personal portfolio. Only answer questions related
 If the question is not about the portfolio, reply: "I'm only here to help with portfolio-related queries."
 """
 
-@app.route('/chat', methods=['POST'])
+@app.route('/chat', methods=['POST', 'OPTIONS'])
 def chat():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'ok'}), 200
+
     user_input = request.json.get("message")
 
     try:
