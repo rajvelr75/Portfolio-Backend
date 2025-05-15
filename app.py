@@ -8,7 +8,7 @@ load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["https://portfolio-2-ao4.pages.dev"])
 
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-pro")
